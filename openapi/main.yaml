@@ -1,0 +1,1174 @@
+openapi: 3.0.3
+info:
+  title: Product Management API
+  description: Product Management API for a Shop
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080'
+tags:
+  - name: "Product"
+  - name: "Task"
+  - name: "Contact"
+  - name: "Book"
+  - name: "Room"
+  - name: "Reservation"
+paths:
+  /products:
+    post:
+      tags:
+        - "Product"
+      summary: "Create new product"
+      description: "Create new product"
+      operationId: "createNewProduct"
+      requestBody:
+        description: "information used to create a new product"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductCreateDTO"
+      responses:
+        "201":
+          description: "Product created successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreationResponseDTO"
+        "400":
+          description: "Invalid request"
+        "409":
+          description: "Product already exist"
+
+    get:
+      tags:
+        - "Product"
+      summary: "Get All products"
+      description: "Get All products"
+      operationId: "getAllProduct"
+      responses:
+        "200":
+          description: "operation successful"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/ProductDTO"
+
+  /products/{id}:
+    put:
+      tags:
+        - "Product"
+      summary: "Update all products"
+      description: "Update all products"
+      operationId: "updateAllProducts"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: "Information you want to update"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProductRequestDTO"
+      responses:
+        "204":
+          description: "Products updated successfully"
+        "400":
+          description: "Invalid request"
+        "404":
+          description: "Product with id not found"
+
+    patch:
+      tags:
+        - "Product"
+      summary: "Update a product"
+      description: "Update a product"
+      operationId: "updateProduct"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: "Information about the product you want to update"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateResponseDTO"
+      responses:
+        "204":
+          description: "Products updated successfully"
+        "400":
+          description: "Invalid request"
+        "404":
+          description: "Product with id not found"
+
+    get:
+      tags:
+        - "Product"
+      summary: "Get products by id"
+      description: "Get products by id"
+      operationId: "getById"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        "200":
+          description: "Product found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductDTO"
+        "404":
+          description: "Product with id not found"
+
+    delete:
+      tags:
+        - Product
+      summary: "Delete product by id"
+      description: "Delete product by id"
+      operationId: "deleteById"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        "204":
+          description: "Product deleted successfully"
+        "404":
+          description: "Product with id not found"
+
+  /tasks:
+    post:
+      tags:
+        - Task
+      summary: Create Tasks
+      description: Create Tasks
+      operationId: createNewTask
+      requestBody:
+        description: Information to create a Task
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskCreateDTO"
+      responses:
+        "201":
+          description: Task added successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskCreationResponseDTO"
+        "400":
+          description: Invalid request
+
+    get:
+      tags:
+        - Task
+      summary: " Get all tasks"
+      description: Get all tasks
+      operationId: getAllTasks
+      responses:
+        "200":
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TaskDTO"
+
+  /tasks/{taskId}:
+    get:
+      tags:
+        - Task
+      summary: Get tasks by id
+      description: Get tasks by id
+      operationId: getTaskById
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskDTO"
+        "404":
+          description: Task not found
+
+    put:
+      tags:
+        - Task
+      summary: Update task's title or completion status
+      description: Update task's title or completion status
+      operationId: updateTask
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: "Information about the task you want to update"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTaskRequestDTO"
+      responses:
+        "200":
+          description: Updated successfully
+        "400":
+          description: Invalid request
+        "404":
+          description: Task not found
+
+    delete:
+      tags:
+        - Task
+      summary: Delete a task by it's id
+      description: Delete a task by it's id
+      operationId: deleteTaskById
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Task deleted successfully
+        "404":
+          description: Task not found
+
+  /contact:
+    post:
+      tags:
+        - Contact
+      summary: "Create contact book"
+      description: "Create contact book"
+      operationId: createContacts
+      requestBody:
+        description: "Information to add to the contact book"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactCreateDTO"
+      responses:
+        "201":
+          description: "Contact added successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactResponseDTO"
+        "400":
+          description: "Invalid request"
+
+    get:
+      tags:
+        - Contact
+      summary: "Get all contacts"
+      description: "Get all contact"
+      operationId: "getAllContacts"
+      responses:
+        "200":
+          description: "Successful"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/ContactDTO"
+
+  /contact/{contactId}:
+    get:
+      tags:
+        - Contact
+      summary: "Get a contact by id"
+      description: "Get a contact by id"
+      operationId: getContactById
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: "successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactDTO"
+        "404":
+          description: Contact not found
+
+    delete:
+      tags:
+        - Contact
+      summary: "Delete contact by id"
+      description: "Delete contact by id"
+      operationId: deleteContactById
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: "successful"
+        "404":
+          description: Contact not found
+
+    put:
+      tags:
+        - Contact
+      summary: "Update a contact's information"
+      description: "Update a contact's information"
+      operationId: updateContact
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: "Information to update"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateContactRequestDTO"
+      responses:
+        "200":
+          description: "ok"
+        "400":
+          description: Invalid request
+        "404":
+          description: Contact not found
+
+  /contact/search:
+    get:
+      tags:
+        - Contact
+      summary: Search contacts by first or last name, without considering uppercase and lowercase letters
+      description: Search contacts by first or last name, without considering uppercase and lowercase letters
+      operationId: searchContactByName
+      parameters:
+        - name: firstName
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: lastName
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ContactDTO"
+
+  /books:
+    post:
+      tags:
+        - Book
+      summary: "Create a new book"
+      description: "Create a new book"
+      operationId: createNewBook
+      requestBody:
+        description: "Information used to create a new book"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookCreateDTO"
+      responses:
+        "201":
+          description: "Book created successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookCreationResponseDTO"
+        "400":
+          description: "Invalid request"
+
+    get:
+      tags:
+        - Book
+      summary: "Get all book"
+      description: "Get all books"
+      operationId: getAllBooks
+      responses:
+        "200":
+          description: "Successful"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BookDTO"
+
+  /books/{bookId}:
+    get:
+      tags:
+        - Book
+      summary: Get books by id
+      description: Get books by id
+      operationId: getBookById
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: "Successful"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookDTO"
+        "404":
+          description: Book not found
+
+    put:
+      tags:
+        - Book
+      summary: Update a book's information
+      description: Update a book's information
+      operationId: updateAllBooks
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Information to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateBookRequestDTO"
+      responses:
+        "200":
+          description: "successful"
+        "400":
+          description: Invalid request
+        "404":
+          description: Book not found
+
+    delete:
+      tags:
+        - Book
+      summary: Delete book by id
+      description: Delete book by id
+      operationId: deleteBookById
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: "Book deleted successfully"
+        "404":
+          description: Book not found
+
+  /books/search:
+    get:
+      tags:
+        - Book
+      summary: Filter books by author, genre, or availability
+      description: Filter books by author, genre, or availability
+      operationId: searchByAuthorGenreAvailability
+      parameters:
+        - name: author
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: genre
+          in: query
+          required: false
+          schema:
+            $ref: "#/components/schemas/GenreDTO"
+        - name: availability
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: "Successful"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BookDTO"
+
+  /rooms:
+    post:
+      tags:
+        - Room
+      summary: "Create a new room"
+      description: Create a new room
+      operationId: createNewRoom
+      requestBody:
+        description: Information to create a room
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoomCreateDTO"
+      responses:
+        "201":
+          description: "Creation successful"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoomCreationResponseDTO"
+        "400":
+          description: Invalid request
+
+    get:
+      tags:
+        - Room
+      summary: "Get all rooms"
+      description: Get all rooms
+      operationId: getAllRooms
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RoomDTO"
+
+  /rooms/{roomId}:
+    get:
+      tags:
+        - Room
+      summary: Get room by id
+      description: Get room by id
+      operationId: getRoomById
+      parameters:
+        - name: roomId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: "Successful"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoomDTO"
+        "404":
+          description: Room not found
+
+    put:
+      tags:
+        - Room
+      summary: Update all rooms
+      description: Update all rooms
+      operationId: updateRoom
+      parameters:
+        - name: roomId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: "Information to update"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateRoomRequestDTO"
+      responses:
+        "200":
+          description: "Success"
+        "400":
+          description: Invalid request
+        "404":
+          description: Room not found
+
+    delete:
+      tags:
+        - Room
+      summary: Delete a room by id
+      description: Delete a room by id
+      operationId: deleteRoomById
+      parameters:
+        - name: roomId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: "success"
+        "404":
+          description: Room not found
+
+  /reservation:
+    post:
+      tags:
+        - Reservation
+      summary: Create a reservation for a room
+      description: Create a reservation for a room
+      operationId: createReservation
+      parameters:
+        - name: roomId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Information to create a reservation
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReservationCreateDTO"
+      responses:
+        "201":
+          description: Creation successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationCreationResponseDTO"
+        "400":
+          description: Invalid request
+        "404":
+          description: Room not found
+        "409":
+          description: The room is already booked for this time slot
+
+    get:
+      tags:
+        - Reservation
+      summary: Get all reservations
+      description: Get all reservations
+      operationId: getAllReservation
+      parameters:
+        - name: roomId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReservationDTO"
+
+  /reservation/{reservationId}:
+    get:
+      tags:
+        - Reservation
+      summary: Display a reservation by it's id
+      description: Display a reservation by it's id
+      operationId: getReservationById
+      parameters:
+        - name: reservationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationDTO"
+        "404":
+          description: Reservation not found
+
+    put:
+      tags:
+        - Reservation
+      summary: Update a reservation
+      description: Update a reservation
+      operationId: updateReservation
+      parameters:
+        - name: reservationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateReservationRequestDTO"
+      responses:
+        "200":
+          description: "Successful"
+        "400":
+          description: Invalid request
+        "404":
+          description: Reservation not found
+
+components:
+  schemas:
+    ProductCreateDTO:
+      type: "object"
+      required:
+        - "name"
+        - "price"
+      properties:
+        name:
+          type: "string"
+        description:
+          type: "string"
+        price:
+          $ref: "#/components/schemas/MoneyDTO"
+
+    MoneyDTO:
+      type: "object"
+      required:
+        - "currency"
+        - "monetaryAmount"
+      properties:
+        monetaryAmount:
+          type: "number"
+        currency:
+          $ref: "#/components/schemas/CurrencyDTO"
+
+    CurrencyDTO:
+      type: "string"
+      enum:
+        - "XAF"
+        - "USD"
+        - "EUR"
+
+    CreationResponseDTO:
+      type: "object"
+      required:
+        - "newId"
+      properties:
+        newId:
+          type: "string"
+          format: "uuid"
+
+    ProductDTO:
+      type: "object"
+      required:
+        - "id"
+        - "name"
+        - "price"
+        - "createdAt"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        name:
+          type: "string"
+        description:
+          type: "string"
+        createdAt:
+          type: "string"
+          format: "date-time"
+        price:
+          $ref: "#/components/schemas/MoneyDTO"
+
+    UpdateProductRequestDTO:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        description:
+          type: "string"
+        price:
+          $ref: "#/components/schemas/MoneyDTO"
+
+    UpdateResponseDTO:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        description:
+          type: "string"
+        price:
+          $ref: "#/components/schemas/MoneyDTO"
+
+    TaskCreateDTO:
+      type: "object"
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          minLength: 1
+        status:
+          $ref: "#/components/schemas/TaskStatusDTO"
+
+    TaskCreationResponseDTO:
+      type: "object"
+      required:
+        - taskId
+      properties:
+        taskId:
+          type: string
+          format: uuid
+
+    TaskDTO:
+      type: object
+      required:
+        - taskId
+        - title
+        - status
+      properties:
+        taskId:
+          type: string
+          format: uuid
+        title:
+          type: string
+        status:
+          $ref: "#/components/schemas/TaskStatusDTO"
+
+    TaskStatusDTO:
+      type: string
+      enum:
+        - COMPLETED
+        - IN_PROGRESS
+        - CANCELLED
+
+    UpdateTaskRequestDTO:
+      type: "object"
+      properties:
+        title:
+          type: string
+          minLength: 1
+        status:
+          $ref: "#/components/schemas/TaskStatusDTO"
+
+    ContactCreateDTO:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - email
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+
+    ContactResponseDTO:
+      type: "object"
+      required:
+        - contactId
+      properties:
+        contactId:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+
+    ContactDTO:
+      type: object
+      required:
+        - contactId
+        - firstName
+        - lastName
+        - email
+      properties:
+        contactId:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+
+    UpdateContactRequestDTO:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+
+    BookCreateDTO:
+      type: object
+      required:
+        - title
+        - author
+        - publishedYear
+        - genre
+        - availability
+      properties:
+        title:
+          type: string
+        author:
+          type: string
+        publishedYear:
+          type: integer
+          minimum: 1000
+        genre:
+          $ref: "#/components/schemas/GenreDTO"
+        availability:
+          type: boolean
+
+    BookCreationResponseDTO:
+      type: object
+      required:
+        - bookId
+      properties:
+        bookId:
+          type: string
+          format: uuid
+
+    BookDTO:
+      type: object
+      required:
+        - bookId
+        - title
+        - author
+        - publishedYear
+        - genre
+        - availability
+      properties:
+        bookId:
+          type: string
+          format: uuid
+        title:
+          type: string
+        author:
+          type: string
+        publishedYear:
+          type: integer
+          minimum: 1000
+        genre:
+          $ref: "#/components/schemas/GenreDTO"
+        availability:
+          type: boolean
+
+    GenreDTO:
+      type: string
+      enum:
+        - ACTION
+        - COMEDY
+        - DRAMA
+        - HORROR
+        - ROMANCE
+        - SCI_FI
+        - DOCUMENTARY
+
+    UpdateBookRequestDTO:
+      type: object
+      properties:
+        author:
+          type: string
+        title:
+          type: string
+        publishedYear:
+          type: integer
+        genre:
+          $ref: "#/components/schemas/GenreDTO"
+        availability:
+          type: boolean
+
+    RoomCreateDTO:
+      type: object
+      required:
+        - name
+        - max_capacity
+        - booked
+      properties:
+        name:
+          type: string
+        max_capacity:
+          type: integer
+        booked:
+          type: boolean
+
+    RoomDTO:
+      type: object
+      required:
+        - roomId
+        - name
+        - max_capacity
+        - booked
+      properties:
+        roomId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        max_capacity:
+          type: integer
+        booked:
+          type: boolean
+
+    RoomCreationResponseDTO:
+      type: object
+      required:
+        - roomId
+      properties:
+        roomId:
+          type: string
+          format: uuid
+
+    UpdateRoomRequestDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        max_capacity:
+          type: integer
+        booked:
+          type: boolean
+
+    ReservationDTO:
+      required:
+        - reservationId
+        - roomId
+        - guestName
+        - startDateTime
+        - endDateTime
+      type: object
+      properties:
+        reservationId:
+          type: string
+          format: uuid
+        roomId:
+          type: string
+          format: uuid
+        guestName:
+          type: string
+        startDateTime:
+          type: string
+          format: date-time
+        endDateTime:
+          type: string
+          format: date-time
+        numberOfParticipants:
+          type: integer
+
+    UpdateReservationRequestDTO:
+      type: object
+      properties:
+        roomId:
+          type: string
+          format: uuid
+        guestName:
+          type: string
+        startDateTime:
+          type: string
+          format: date-time
+        endDateTime:
+          type: string
+          format: date-time
+        numberOfParticipants:
+          type: integer
+
+    ReservationCreateDTO:
+      type: object
+      required:
+        - guestName
+        - startDateTime
+        - endDateTime
+        - numberOfParticipants
+      properties:
+        guestName:
+          type: string
+        startDateTime:
+          type: string
+          format: date-time
+        endDateTime:
+          type: string
+          format: date-time
+        numberOfParticipants:
+          type: integer
+
+    ReservationCreationResponseDTO:
+      type: object
+      required:
+        - reservationId
+      properties:
+        reservationId:
+          type: string
+          format: uuid
